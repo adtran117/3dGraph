@@ -2,18 +2,8 @@ var RC = {};
 
 RC.raycasters = {
   hover: new THREE.Raycaster(),
-  click: new THREE.Raycaster()
-};
-
-App.onMouseMove = (event) => {
-  App.mouse.isMoving = true;
-  App.mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-  App.mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;   
-  App.mouse.isMoving = false;
-};
-
-App.onMouseDown = (event) => {
-  RC.handleMouseDown(event);
+  click: new THREE.Raycaster(),
+  camera: new THREE.Raycaster(),
 };
 
 RC.handleMouseOver = () => {
@@ -100,5 +90,5 @@ RC.handleMouseDown = (event) => {
   // }
 }; 
 
-window.addEventListener('mousemove', App.onMouseMove, false);
-window.addEventListener('mousedown', App.onMouseDown, false);
+window.addEventListener('mousemove', App.onMouseMove);
+window.addEventListener('click', App.onMouseDown);

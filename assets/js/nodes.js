@@ -92,12 +92,12 @@ Nodes.connectNodes = (...args) => {
 
 var main = Nodes.createNode([0, 0, 0], 0x22FF22);
 
-// var a = Nodes.createNode([0, 0, 2]);
-// var b = Nodes.createNode([-2, 0, 1]);
-// var c = Nodes.createNode([2, 2, -1]);
+var a = Nodes.createNode([0, 0, 2]);
+var b = Nodes.createNode([-2, 0, 1]);
+var c = Nodes.createNode([2, 2, -1]);
 
-// Nodes.connectTwoNodes(c, main);
-// Nodes.connectTwoNodes(b, main);
-// Nodes.connectTwoNodes(c, main);
+Nodes.connectTwoNodes(c, main);
+Nodes.connectTwoNodes(b, main);
+Nodes.connectTwoNodes(c, main);
 
-// Nodes.connectNodes(a, b, main);
+Nodes.connectNodes(a, b, main);
