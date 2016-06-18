@@ -1,3 +1,4 @@
+
 // I hope you like spaghetti
 
 var App = {};
@@ -21,16 +22,6 @@ App.context = App.canvas.getContext('2d');
 
 App.camera.position.z = 4;
 
-// Helpers //
-
-window.addEventListener("resize", resizeCanvas, false);
- 
-var resizeCanvas = (e) => {
-  var myCanvas = document.getElementById('myCanvas');
-  myCanvas.width = document.documentElement.clientWidth;
-  myCanvas.height = document.documentElement.clientHeight;
-};
-
 
 // Main App methods //
 
@@ -47,8 +38,6 @@ App.createPlane = (data = {}) => {
 
   return plane;
 };
-
-
 
 // App.scene.add(
 //   App.groundPlane = App.createPlane({
