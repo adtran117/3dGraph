@@ -19,7 +19,6 @@ RC.handleMouseOver = () => {
   let length = intersects.length;
 
   for (let i = 0; i < length; i++) {
-
     if (intersects.length > 0) {
       if (intersects[i].object.isNode) {
 
@@ -38,56 +37,7 @@ RC.handleMouseDown = (event) => {
 
   if (!node) { return; }
 
-  let number = Math.round(Math.random() * 6);
-
-  let nx = node.position.x;
-  let ny = node.position.y;
-  let nz = node.position.z;
-
-  let prevNode = null;
-
-  for (let i = 0; i < number; i++) {
-    let x = (Math.random() * 3);
-    let y = (Math.random() * 3);
-    let z = (Math.random() * 3);
-
-    if (Math.round(Math.random()) === 1) {
-      x = -x;
-    }
-
-    if (Math.round(Math.random()) === 1) {
-      y = -y;
-    }
-
-    if (Math.round(Math.random()) === 1) {
-      z = -z;
-    }
-
-    let newNode = Nodes.createNode([nx + x, ny + y, nz + z]);
-
-    if (Math.round(Math.random() * 2) === 1) {
-      let randomIndex = Math.round(Math.random() * (Nodes.collection.length - 1));
-      let connect = Nodes.collection[randomIndex];
-
-      if (connect !== newNode) {
-        Nodes.connectTwoNodes(connect, newNode);
-      }
-    }
-
-    Nodes.connectTwoNodes(newNode, node);
-  }
-
-  // let scale = 0;
-  // if (event.button === 0) {
-  //   scale = 0.25;
-  // } else if (event.button === 2) {
-  //   scale = -0.25;
-  // }
-
-  // if (App.selectedNode.length > 0 && !App.mouse.isMoving) {
-  //   let node = App.selectedNode[0];
-  //   node.scale.set(node.scale.x + scale, node.scale.y + scale, node.scale.z + scale);
-  // }
+  Nodes.onClick(node);
 }; 
 
 window.addEventListener('mousemove', App.onMouseMove);

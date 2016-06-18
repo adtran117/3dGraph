@@ -1,3 +1,12 @@
+/*
+
+  === TODOS ==
+
+  [ ]  More modularity, separation of concerns
+  [ ]  Change bs in nodes.js on lines 156-210 to actual functions
+  [ ]  Make nodes appear surrounding the parent node distributedly (is that a word?)
+
+*/
 
 // I hope you like spaghetti
 
