@@ -2,13 +2,12 @@
 
   === TODOS ==
 
+  [ ]  Implement MVC
   [ ]  More modularity, separation of concerns
   [ ]  Change awfulness in nodes.js on lines 156-210 to actual functions
   [ ]  Make nodes appear surrounding the parent node distributedly (is that a word?)
 
 */
-
-// I hope you like spaghetti
 
 const App = {};
 
@@ -37,6 +36,6 @@ App.init = () => {
 App.render = () => {
   requestAnimationFrame(App.render);
   App.controls.update();
-  RC.handleMouseOver();
+  // RC.handleMouseOver();
   App.renderer.render(App.scene, App.camera);
 };

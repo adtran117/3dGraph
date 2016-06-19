@@ -1,21 +1,36 @@
 class NodeView {
-  constructor (model) {
-    this.model = model;
+  constructor (data, collection, model) {
+    this.collection = collection;
+
+    if (this.collection.hasOwnProperty(data.id)) {
+      return;
+    }
+
+    if (!data.hasOwnProperty(data.material.color)) {
+      data.material.color = 0x00AAFF;
+    }
+
+    if (!data.texture.hasOwnProperty('sprite')) {
+      data.texture.sprite = 'node.png';
+    }
+
+    this.model = new NodeModel(data, collection);
   }
 
   onClick () {
-    let repos = node.data.repos;
+    let repos = model.data.repos;
     let length = repos.length;
 
-    let nx = node.position.x;
-    let ny = node.position.y;
-    let nz = node.position.z;
+    let obj = model.object;
+
+    let nx = obj.position.x;
+    let ny = obj.position.y;
+    let nz = obj.position.z;
 
     for (let i = 0; i < length; i++) {
 
       let repoId = repos[i];
 
-      
       let x = (Math.random() * 2);
       let y = (Math.random() * 2);
       let z = (Math.random() * 2);

@@ -1,11 +1,12 @@
 class NodeCollection {
   constructor () {
-    this.storage = {};
+    this._modelStorage = {};
+    this._viewStorage = {};
   }
 
   add (...args) {
     if (args.length < 1) {
-      throw new Error('NodeCollection.add() - Minimum of 1 node required');
+      throw new Error('NodeCollection.add() - Minimum of 1 object required');
       return;
     }
 
@@ -16,12 +17,16 @@ class NodeCollection {
     }
   }
 
-  _addOne (node) {
-    if (this.storage.hasOwnProperty(node.id)) {
-      return;
+  _addOne (obj) {
+    if (obj instanceof NodeModel) {
+      if (!this._modelStorage.hasOwnProperty(obj.id)) {
+        this._modelStorage[obj.id] = obj;
+      }
+    } else if (obj instanceof NodeView) {
+      if (!this._viewStorage.hasOwnProperty(obj.model.id)) {
+        this._viewStorage[obj.model.id] = obj;
+      }
     }
-
-    this.storage[node.id] = node;
   }
 
   connectNodes (...args) {
@@ -38,9 +43,44 @@ class NodeCollection {
         let node2 = args[j];
 
         if (i !== j) {
-          node1.connectToNode(node2);
+          this._connectTwoNodes(node1, node2);
         }
       }
     }
+  }
+
+  _connectTwoNodes (node1, node2) {
+    if (node1.connections.hasOwnProperty(node2.id)) {
+      return;
+    }
+
+    let material = new THREE.LineBasicMaterial({ 
+      color: 0x00FFFF,
+      linewidth: 1,
+      fog: true
+    });
+
+    let geometry = new THREE.Geometry();
+
+    let pos1 = node1.object.position;
+    let pos2 = node2.object.position;
+
+    geometry.vertices.push(
+      new THREE.Vector3(pos1.x, pos1.y, pos1.z),
+      new THREE.Vector3(pos2.x, pos2.y, pos2.z)
+    );
+    let line = new THREE.Line(geometry, material);
+
+    line.object = {
+      isNode: false
+    };
+
+    line.nodes = [node1, node2];
+
+    node1.edges.push(line);
+    node2.edges.push(line);
+
+    node1.connections[node2.id] = node2;
+    node2.connections[node1.id] = node1;
   }
 }
