@@ -11,6 +11,20 @@
 
 const App = {};
 
+App.createPlane = (data) => {
+  let geometry = new THREE.PlaneGeometry(
+    data.geometry.width, 
+    data.geometry.height, 
+    data.geometry.widthSegments,
+    data.geometry.heightSegments
+  );
+
+  let material = new THREE.MeshBasicMaterial(data.material);
+  let plane = new THREE.Mesh(geometry, material);
+
+  return plane;
+};
+
 App.init = () => {
   App.mouse = new THREE.Vector2(0, 0);
 
@@ -19,7 +33,23 @@ App.init = () => {
     window.innerWidth / window.innerHeight, 0.1, 1000);
 
   App.camera.position.z = 4;
-  App.scene.add(App.camera);
+  // App.scene.add(App.camera);
+
+  App.groundPlane = App.createPlane({
+    geometry: {
+      width: 1000,
+      height: 1000,
+      widthSegments: 16,
+      heightSegments: 16
+    },
+
+    material: {
+      color: 0x00FFFF,
+      wireframe: true
+    }
+  });
+
+  App.scene.add(App.groundPlane);
 
   App.renderer = new THREE.WebGLRenderer();
   App.renderer.setSize(window.innerWidth, window.innerHeight);
@@ -30,10 +60,8 @@ App.init = () => {
 
   App.selectedNode = []; 
 
-  let collection = new NodeCollection();
-  let node = new NodeView({
-    id: 0,
-
+  App.Users = new NodeCollection();
+  let user = new NodeView({
     object: {
       position: [0, 0, 0]
     },
@@ -44,10 +72,30 @@ App.init = () => {
 
     material: {
       color: 0x22FF22
-    }
+    },
 
+    data: exampleUserData[0]
   }, 
-    collection);
+    App.Users);
+
+  App.Repos = new NodeCollection();
+  
+  let repo = new NodeView({
+    object: {
+      position: [0, 0, 5]
+    },
+
+    texture: {
+      sprite: 'node.png'
+    },
+
+    material: {
+      color: 0x22FF22
+    },
+
+    data: exampleRepoData[0]
+  }, 
+    App.Repos);
 
   App.render();
 }
