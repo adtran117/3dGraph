@@ -2,9 +2,9 @@
 
   === TODOS ==
 
-  [ ]  Implement MVC
+  [ ]  Implement MVC for nodes
   [ ]  More modularity, separation of concerns
-  [ ]  Change awfulness in nodes.js on lines 156-210 to actual functions
+  [X]  Change awfulness in nodes.js on lines 156-210 to actual functions
   [ ]  Make nodes appear surrounding the parent node distributedly (is that a word?)
 
 */
@@ -29,6 +29,25 @@ App.init = () => {
   document.body.appendChild(App.renderer.domElement);
 
   App.selectedNode = []; 
+
+  let collection = new NodeCollection();
+  let node = new NodeView({
+    id: 0,
+
+    object: {
+      position: [0, 0, 0]
+    },
+
+    texture: {
+      sprite: 'node.png'
+    },
+
+    material: {
+      color: 0x22FF22
+    }
+
+  }, 
+    collection);
 
   App.render();
 }

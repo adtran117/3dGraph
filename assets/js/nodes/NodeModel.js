@@ -1,6 +1,6 @@
 class NodeModel {
   constructor (data, collection) {
-    if (arguments.length < 3) {
+    if (arguments.length < 2) {
       throw new Error(
         'NodeModel constructor(data, collection) - Wrong number of arguments');
       return;
@@ -12,17 +12,20 @@ class NodeModel {
       return;
     }
 
-    if (data.position.length < 3) {
+    if (data.object.position.length < 3) {
       throw new Error(
         'NodeModel constructor(data, collection) - Wrong number of coordinates for position');
       return;
     }
 
+
+    this.collection = collection;
+
     this.id = data.id;
 
     this.texture = new THREE.TextureLoader().load('assets/img/' + data.texture.sprite);
     this.material = new THREE.SpriteMaterial({ 
-      map: data.material.texture, 
+      map: this.texture, 
       color: data.material.color,
       fog: true
     });
@@ -42,6 +45,8 @@ class NodeModel {
     this.object.position.z = pos[2];
 
     this.data = data.data;
+
+    console.log(this.object);
 
     this.collection.add(this);
     App.scene.add(this.object);

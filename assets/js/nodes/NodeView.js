@@ -6,7 +6,7 @@ class NodeView {
       return;
     }
 
-    if (!data.hasOwnProperty(data.material.color)) {
+    if (!data.material.hasOwnProperty('color')) {
       data.material.color = 0x00AAFF;
     }
 
