@@ -21,8 +21,6 @@ class NodeModel {
 
     this.collection = collection;
 
-    this.id = data.id;
-
     this.texture = new THREE.TextureLoader().load('assets/img/' + data.texture.sprite);
     this.material = new THREE.SpriteMaterial({ 
       map: this.texture, 
@@ -46,9 +44,47 @@ class NodeModel {
 
     this.data = data.data;
 
-    console.log(this.object);
+    console.log(data);
 
     this.collection.add(this);
     App.scene.add(this.object);
+  }
+
+  onClick() {
+    let repos = this.data.repos;
+    let length = repos.length;
+
+    let obj = model.object;
+
+    let nx = obj.position.x;
+    let ny = obj.position.y;
+    let nz = obj.position.z;
+
+    for (let i = 0; i < length; i++) {
+
+      let repoId = repos[i];
+
+      let x = (Math.random() * 2);
+      let y = (Math.random() * 2);
+      let z = (Math.random() * 2);
+
+      if (Math.round(Math.random()) === 1) { x = -x; }
+      if (Math.round(Math.random()) === 1) { y = -y; }
+      if (Math.round(Math.random()) === 1) { z = -z; }
+
+      let newNode = Nodes.createNode([nx + x, ny + y, nz + z], 
+        exampleRepoData[repoId], 0x22FF22);
+
+      if (Math.round(Math.random() * 2) === 1) {
+        let randomIndex = Math.round(Math.random() * (Nodes.collection.length - 1));
+        let connect = Nodes.collection[randomIndex];
+
+        if (connect !== newNode) {
+          Nodes.connectTwoNodes(connect, newNode);
+        }
+      }
+
+      Nodes.connectTwoNodes(newNode, node);
+    }
   }
 }

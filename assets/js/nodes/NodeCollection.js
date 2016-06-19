@@ -17,15 +17,29 @@ class NodeCollection {
     }
   }
 
+  _addView (obj) {
+    if (!this._viewStorage.hasOwnProperty(obj.model.data.id)) {
+      this._viewStorage[obj.model.data.id] = obj;
+    }
+  }
+
+  _addModel (obj) {
+    if (!this._modelStorage.hasOwnProperty(obj.data.id)) {
+      this._modelStorage[obj.data.id] = obj;
+    }
+  }
+
   _addOne (obj) {
     if (obj instanceof NodeModel) {
-      if (!this._modelStorage.hasOwnProperty(obj.id)) {
-        this._modelStorage[obj.id] = obj;
-      }
+      this._addModel(obj);
     } else if (obj instanceof NodeView) {
-      if (!this._viewStorage.hasOwnProperty(obj.model.id)) {
-        this._viewStorage[obj.model.id] = obj;
-      }
+      this._addView(obj);
+    } else {
+      let view = new NodeView(obj, this);
+      let model = view.model;
+
+      this._addView(view);
+      this._addModel(model);
     }
   }
 
