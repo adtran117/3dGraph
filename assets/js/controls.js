@@ -12,7 +12,7 @@ Controls.init = () => {
 Controls.onMouseMove = (event) => {
   Controls.mouse.x = event.clientX;
   Controls.mouse.y = event.clientY;
-  
+
   App.mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
   App.mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
 
@@ -34,28 +34,41 @@ Controls.update = () => {
     let diffy = dest.y - pos.y;
     let diffz = dest.z - pos.z;
 
-    let mul = 0.05;
+    let mulx, muly, mulz;
 
-    if (Math.abs(diffx) >= mul) {
-      App.controls.target.x += (Math.sign(diffx) * mul);
+    if (Math.abs(diffx) > 2) { mulx = Math.abs(diffx); }
+      else { mulx = Math.abs(Math.sin(diffx)); }
+
+    if (Math.abs(diffy) > 2) { muly = Math.abs(diffy); }
+      else { muly = Math.abs(Math.sin(diffy)); }
+
+    if (Math.abs(diffz) > 2) { mulz = Math.abs(diffz); }
+      else { mulz = Math.abs(Math.sin(diffz)); }
+
+
+    let mul = 0.075;
+    let min = 0.0001;
+
+    if (Math.abs(diffx) >= min && mulx >= min) {
+      App.controls.target.x += (Math.sign(diffx) * mulx * mul);
     } else {
       // To prevent infinite jittering
       App.controls.target.x = dest.x;
     }
 
-    if (Math.abs(diffy) >= mul) {
-      App.controls.target.y += (Math.sign(diffy) * mul);
+    if (Math.abs(diffy) >= min && mulx >= min) {
+      App.controls.target.y += (Math.sign(diffy) * muly * mul);
     } else {
       App.controls.target.y = dest.y;
     }
 
-    if (Math.abs(diffz) >= mul) {
-      App.controls.target.z += (Math.sign(diffz) * mul);
+    if (Math.abs(diffz) >= min && mulx >= min) {
+      App.controls.target.z += (Math.sign(diffz) * mulz * mul);
     } else {
       App.controls.target.z = dest.z;
     }
   } else {
-    App.controls.minDistance = Controls.minDistance;
+    // App.controls.minDistance = Controls.minDistance;
     App.controls.maxDistance = Controls.maxDistance;
   }
 };
