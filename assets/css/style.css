@@ -1,0 +1,14 @@
+#label {
+  color: #FFF; 
+  background-color: #777; 
+  font-family: Helvetica;
+  position: absolute; 
+  cursor: default;
+  padding: 10px;
+  border-radius: 4px;
+  transform-origin: center;
+}
+
+body {
+  background-color: #000;
+}

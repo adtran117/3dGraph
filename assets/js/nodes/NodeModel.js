@@ -6,18 +6,6 @@ class NodeModel {
       return;
     }
 
-    if (typeof data === 'undefined') {
-      throw new Error(
-        'NodeModel constructor(data, collection) - data required');
-      return;
-    }
-
-    if (data.object.position.length < 3) {
-      throw new Error(
-        'NodeModel constructor(data, collection) - Wrong number of coordinates for position');
-      return;
-    }
-
     this.collection = collection;
   }
 

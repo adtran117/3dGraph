@@ -1,13 +1,14 @@
 class NodeView {
   constructor (data, collection) {
     if (arguments.length < 2) {
-      throw new Error('NodeView constructor(data, collection) - Wrong number of arguments');
+      throw new Error(
+        'NodeView constructor(data, collection) - Wrong number of arguments');
       return;
     }
     this.collection = collection;
 
     if (this.collection.hasOwnProperty(data.id)) { return; }
-    
+
     if (!data.hasOwnProperty('material')) { data.material = {}; }
     if (!data.hasOwnProperty('texture')) { data.texture = {}; }
     if (!data.hasOwnProperty('object')) { data.object = {}; }

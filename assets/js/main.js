@@ -2,10 +2,10 @@
 
   === TODOS ==
 
-  [ ]  Implement MVC for nodes
-  [ ]  More modularity, separation of concerns
+  [X]  Implement MVC for nodes
+  [X]  More modularity, separation of concerns
   [X]  Change awfulness in nodes.js on lines 156-210 to actual functions
-  [ ]  Make nodes appear surrounding the parent node distributedly (is that a word?)
+  [X]  Make nodes appear surrounding the parent node distributedly (is that a word?)
 
 */
 

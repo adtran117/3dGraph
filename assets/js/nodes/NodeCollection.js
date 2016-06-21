@@ -13,7 +13,8 @@ class NodeCollection {
 
   add (...args) {
     if (args.length < 1) {
-      throw new Error('NodeCollection.add() - Minimum of 1 object required');
+      throw new Error(
+        'NodeCollection.add() - Minimum of 1 object required');
       return;
     }
 
@@ -30,7 +31,8 @@ class NodeCollection {
 
   connectNodes (...args) {
     if (args.length < 2) {
-      throw new Error('NodeCollection.connectNodes() - Minimum of 2 nodes required');
+      throw new Error(
+        'NodeCollection.connectNodes() - Minimum of 2 nodes required');
       return;
     }
 

@@ -6,9 +6,29 @@ Ray.casters = {
   camera: new THREE.Raycaster(),
 };
 
+let a = 0;
+
 Ray.handleMouseOver = () => {
-  if (App.selectedNode.length > 0) {
-    App.selectedNode[0].material.color.set(App.selectedNode[1]);
+  let selectedNode = App.selectedNode;
+  let label = document.getElementById('label');
+
+  if (selectedNode.length > 0) {
+    selectedNode[0].material.color.set(selectedNode[1]);
+
+    // let x = selectedNode[0].position.x;
+    // let y = selectedNode[0].position.y;
+    // let z = selectedNode[0].position.z;
+
+    label.style.left = Controls.mouse.x + 'px';
+    label.style.top = Controls.mouse.y + 'px';
+
+    label.innerHTML = 
+      '<small>(' + selectedNode[0].model.data.type + ')</small><br />' +
+      selectedNode[0].model.data.name;
+    label.style.visibility = 'visible';
+  } else {
+    label.innerHTML = '';
+    label.style.visibility = 'hidden';
   }
 
   App.selectedNode = [];
@@ -45,7 +65,7 @@ Ray.handleMouseDown = (event) => {
 
   let dist = new THREE.Vector3(x, y, z).length();
 
-  App.controls.minDistance = dist;
+  // App.controls.minDistance = dist;
   App.controls.maxDistance = dist;
 
   node.view.onClick();

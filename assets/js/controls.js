@@ -1,13 +1,18 @@
-const Controls = {};
+const Controls = { 
+  mouse: { x: 0, y: 0 }
+};
 
 Controls.init = () => {
-  Controls.destination = App.controls.target;
   Controls.targetObj;
-  Controls.minDistance = App.controls.minDistance;
+  Controls.destination = App.controls.target;
+  // Controls.minDistance = App.controls.minDistance;
   Controls.maxDistance = App.controls.maxDistance;
 };
 
 Controls.onMouseMove = (event) => {
+  Controls.mouse.x = event.clientX;
+  Controls.mouse.y = event.clientY;
+  
   App.mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
   App.mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
 
