@@ -10,7 +10,6 @@ class NodeModel {
   }
 
   onClick() {
-    // App.controls.target = this.object.position;
     Controls.destination = this.object.position;
 
     let connectedTo = this.data.connectedTo;
@@ -23,37 +22,17 @@ class NodeModel {
     let nz = obj.position.z;
 
     for (let i = 0; i < length; i++) {
-
-
       let objId = connectedTo[i];
 
       if (this.connections.hasOwnProperty(objId)) { continue; }
 
-      let x = -1 + Math.random() * 2;
-      let y = -1 + Math.random() * 2;
-      let z = -1 + Math.random() * 2;
-      let d = 1 / Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2) + Math.pow(z, 2));
-      x *= d;
-      y *= d;
-      z *= d;
+      let x = (Math.random()) + 0.5;
+      let y = (Math.random()) + 0.5;
+      let z = (Math.random()) + 0.5;
 
-      // let x = (Math.random() * 2) + 1;
-      // let y = (Math.random() * 2) + 1;
-      // let z = (Math.random() * 2) + 1;
-
-      // let R = 3;
-
-      // let latitude = i / R;
-      // let longitude = (2 * Math.atan(Math.exp(i / R))) - (Math.PI / 2);
-
-      // let x = R * Math.cos(latitude) * Math.cos(longitude);
-      // let y = R * Math.cos(latitude) * Math.sin(longitude);
-      // let z = R * Math.sin(latitude);
-
-      // if (Math.round(Math.random()) === 1) { x = -x; }
-      // if (Math.round(Math.random()) === 1) { y = -y; }
-      // if (Math.round(Math.random()) === 1) { z = -z; }
-
+      x = Math.random() === 1 ? -x : x;
+      y = Math.random() === 1 ? -y : y;
+      z = Math.random() === 1 ? -z : z;
 
       let data, color, collection, node;
 
@@ -70,7 +49,7 @@ class NodeModel {
       } else {
         node = new NodeView({
           object: {
-            position: [(nx + x) * 1.5, (ny + y) * 1.5, (nz + z) * 1.5]
+            position: [(nx + x), (ny + y), (nz + z)]
           },
 
           texture: {
