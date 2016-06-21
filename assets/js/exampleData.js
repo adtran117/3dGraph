@@ -13,10 +13,24 @@ const exampleUserData = {
     type: 'user'
   },
 
+  2: {
+    id: 2,
+    name: 'Beth',
+    connectedTo: [6, 3, 4, 1, 2],
+    type: 'user'
+  },
+
+  3: {
+    id: 3,
+    name: 'Marcus',
+    connectedTo: [6, 5],
+    type: 'user'
+  },
+
   4: {
     id: 4,
     name: 'Mike',
-    connectedTo: [5],
+    connectedTo: [5, 2],
     type: 'user'
   },
 
@@ -53,7 +67,7 @@ const exampleRepoData = {
   2: {
     id: 2,
     name: 'Test2', 
-    connectedTo: [0, 1],
+    connectedTo: [0, 1, 4],
     type: 'repo'
   },
 
@@ -74,7 +88,14 @@ const exampleRepoData = {
   5: {
     id: 5,
     name: 'Test5',
-    connectedTo: [1, 4],
+    connectedTo: [1, 4, 3],
+    type: 'repo'
+  },
+
+  6: {
+    id: 6,
+    name: 'Test6',
+    connectedTo: [2, 10, 3],
     type: 'repo'
   }
 };
