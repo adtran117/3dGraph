@@ -1,7 +1,14 @@
 class NodeCollection {
   constructor () {
-    this._modelStorage = {};
-    this._viewStorage = {};
+    this._storage = {};
+  }
+
+  has (id) {
+    return this._storage.hasOwnProperty(id);
+  }
+
+  get (id) {
+    return this._storage[id];
   }
 
   add (...args) {
@@ -17,30 +24,8 @@ class NodeCollection {
     }
   }
 
-  _addView (obj) {
-    if (!this._viewStorage.hasOwnProperty(obj.model.data.id)) {
-      this._viewStorage[obj.model.data.id] = obj;
-    }
-  }
-
-  _addModel (obj) {
-    if (!this._modelStorage.hasOwnProperty(obj.data.id)) {
-      this._modelStorage[obj.data.id] = obj;
-    }
-  }
-
   _addOne (obj) {
-    if (obj instanceof NodeModel) {
-      this._addModel(obj);
-    } else if (obj instanceof NodeView) {
-      this._addView(obj);
-    } else {
-      let view = new NodeView(obj, this);
-      let model = view.model;
-
-      this._addView(view);
-      this._addModel(model);
-    }
+    this._storage[obj.data.id] = obj;
   }
 
   connectNodes (...args) {
@@ -64,13 +49,21 @@ class NodeCollection {
   }
 
   _connectTwoNodes (node1, node2) {
-    if (node1.connections.hasOwnProperty(node2.id)) {
+    if (node1 instanceof NodeView || node1 instanceof THREE.Sprite) {
+      node1 = node1.model;
+    }
+
+    if (node2 instanceof NodeView || node2 instanceof THREE.Sprite) {
+      node2 = node2.model;
+    }
+
+    if (node1.connections.hasOwnProperty(node2.data.id)) {
       return;
     }
 
     let material = new THREE.LineBasicMaterial({ 
-      color: 0x00FFFF,
-      linewidth: 1,
+      color: 0xDAFAEC,
+      linewidth: 4,
       fog: true
     });
 
@@ -94,7 +87,9 @@ class NodeCollection {
     node1.edges.push(line);
     node2.edges.push(line);
 
-    node1.connections[node2.id] = node2;
-    node2.connections[node1.id] = node1;
+    node1.connections[node2.data.id] = node2;
+    node2.connections[node1.data.id] = node1;
+
+    App.scene.add(line);
   }
 }
