@@ -9,52 +9,53 @@
 
 */
 
-const App = {};
-
-App.createPlane = (data) => {
-  let geometry = new THREE.PlaneGeometry(
-    data.geometry.width, 
-    data.geometry.height, 
-    data.geometry.widthSegments,
-    data.geometry.heightSegments
-  );
-
-  let material = new THREE.MeshBasicMaterial(data.material);
-  let plane = new THREE.Mesh(geometry, material);
-
-  return plane;
-};
+const App = { mouse: new THREE.Vector2(0, 0) };
 
 App.init = () => {
-  App.mouse = new THREE.Vector2(0, 0);
-
   App.scene = new THREE.Scene();
   App.camera = new THREE.PerspectiveCamera(75, 
     window.innerWidth / window.innerHeight, 0.1, 1000);
 
   App.camera.position.z = 4;
-  // App.scene.add(App.camera);
+  App.scene.add(App.camera);
 
-  App.groundPlane = App.createPlane({
-    geometry: {
-      width: 1000,
-      height: 1000,
-      widthSegments: 16,
-      heightSegments: 16
-    },
+  // App.createPlane = (data) => {
+  //   let geometry = new THREE.PlaneGeometry(
+  //     data.geometry.width, 
+  //     data.geometry.height, 
+  //     data.geometry.widthSegments,
+  //     data.geometry.heightSegments
+  //   );
 
-    material: {
-      color: 0x00FFFF,
-      wireframe: true
-    }
-  });
+  //   let material = new THREE.MeshBasicMaterial(data.material);
+  //   let plane = new THREE.Mesh(geometry, material);
 
-  App.scene.add(App.groundPlane);
+  //   return plane;
+  // };
+
+  // App.groundPlane = App.createPlane({
+  //   geometry: {
+  //     width: 1000,
+  //     height: 1000,
+  //     widthSegments: 16,
+  //     heightSegments: 16
+  //   },
+
+  //   material: {
+  //     color: 0x00FFFF,
+  //     wireframe: true
+  //   }
+  // });
+
+  // App.scene.add(App.groundPlane);
 
   App.renderer = new THREE.WebGLRenderer();
   App.renderer.setSize(window.innerWidth, window.innerHeight);
 
-  App.controls = new THREE.TrackballControls(App.camera, App.renderer.domElement);
+  App.controls = new THREE.TrackballControls(App.camera);
+  App.controls.minDistance = 0.4;
+  App.controls.maxDistance = 2.4;
+  Controls.init();
 
   document.body.appendChild(App.renderer.domElement);
 
@@ -63,46 +64,34 @@ App.init = () => {
   App.Users = new NodeCollection();
   let user = new NodeView({
     object: {
-      position: [0, 0, 0]
+      position: [0, 0, 0],
+      isNode: true
     },
 
     texture: {
-      sprite: 'node.png'
+      sprite: 'node2.png'
     },
 
-    material: {
-      color: 0x22FF22
-    },
+    material: {},
 
-    data: exampleUserData[0]
+    data: exampleUserData[1]
   }, 
     App.Users);
 
   App.Repos = new NodeCollection();
-  
-  let repo = new NodeView({
-    object: {
-      position: [0, 0, 5]
-    },
 
-    texture: {
-      sprite: 'node.png'
-    },
-
-    material: {
-      color: 0x22FF22
-    },
-
-    data: exampleRepoData[0]
-  }, 
-    App.Repos);
+  Controls.targetObj = user;
 
   App.render();
 }
 
 App.render = () => {
   requestAnimationFrame(App.render);
+
   App.controls.update();
-  // RC.handleMouseOver();
+  Controls.update();
+
+  Ray.handleMouseOver();
+
   App.renderer.render(App.scene, App.camera);
 };
