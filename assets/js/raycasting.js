@@ -4,6 +4,7 @@ Ray.casters = {
   hover: new THREE.Raycaster(),
   click: new THREE.Raycaster(),
   camera: new THREE.Raycaster(),
+  collision: new THREE.Raycaster(),
 };
 
 let a = 0;

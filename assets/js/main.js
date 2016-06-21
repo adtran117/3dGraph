@@ -1,6 +1,6 @@
 /*
 
-  === TODOS ==
+  === TODO ==
 
   [X]  Implement MVC for nodes
   [X]  More modularity, separation of concerns
@@ -19,42 +19,14 @@ App.init = () => {
   App.camera.position.z = 4;
   App.scene.add(App.camera);
 
-  // App.createPlane = (data) => {
-  //   let geometry = new THREE.PlaneGeometry(
-  //     data.geometry.width, 
-  //     data.geometry.height, 
-  //     data.geometry.widthSegments,
-  //     data.geometry.heightSegments
-  //   );
-
-  //   let material = new THREE.MeshBasicMaterial(data.material);
-  //   let plane = new THREE.Mesh(geometry, material);
-
-  //   return plane;
-  // };
-
-  // App.groundPlane = App.createPlane({
-  //   geometry: {
-  //     width: 1000,
-  //     height: 1000,
-  //     widthSegments: 16,
-  //     heightSegments: 16
-  //   },
-
-  //   material: {
-  //     color: 0x00FFFF,
-  //     wireframe: true
-  //   }
-  // });
-
-  // App.scene.add(App.groundPlane);
-
   App.renderer = new THREE.WebGLRenderer();
   App.renderer.setSize(window.innerWidth, window.innerHeight);
 
   App.controls = new THREE.TrackballControls(App.camera);
+
   App.controls.minDistance = 0.4;
-  App.controls.maxDistance = 2.4;
+  App.controls.maxDistance = 4.4;
+
   Controls.init();
 
   document.body.appendChild(App.renderer.domElement);
@@ -62,6 +34,8 @@ App.init = () => {
   App.selectedNode = []; 
 
   App.Users = new NodeCollection();
+  App.Repos = new NodeCollection();
+
   let user = new NodeView({
     object: {
       position: [0, 0, 0],
@@ -72,18 +46,15 @@ App.init = () => {
       sprite: 'node2.png'
     },
 
-    material: {},
-
-    data: exampleUserData[1]
+    data: exampleUserData[4]
   }, 
     App.Users);
 
-  App.Repos = new NodeCollection();
 
   Controls.targetObj = user;
 
   App.render();
-}
+};
 
 App.render = () => {
   requestAnimationFrame(App.render);
