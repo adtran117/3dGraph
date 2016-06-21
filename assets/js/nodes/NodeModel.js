@@ -18,43 +18,17 @@ class NodeModel {
       return;
     }
 
-
     this.collection = collection;
-
-    this.texture = new THREE.TextureLoader().load('assets/img/' + data.texture.sprite);
-    this.material = new THREE.SpriteMaterial({ 
-      map: this.texture, 
-      color: data.material.color,
-      fog: true
-    });
-
-    this.object = new THREE.Sprite(this.material);
-
-    this.isNode = true;
-    this.edges = [];
-    this.connections = {};
-
-    this.object.scale.set(0.25, 0.25, 0.25);
-
-    let pos = data.object.position;
-
-    this.object.position.x = pos[0];
-    this.object.position.y = pos[1];
-    this.object.position.z = pos[2];
-
-    this.data = data.data;
-
-    console.log(data);
-
-    this.collection.add(this);
-    App.scene.add(this.object);
   }
 
   onClick() {
-    let repos = this.data.repos;
-    let length = repos.length;
+    // App.controls.target = this.object.position;
+    Controls.destination = this.object.position;
 
-    let obj = model.object;
+    let connectedTo = this.data.connectedTo;
+    let length = connectedTo.length;
+
+    let obj = this.object;
 
     let nx = obj.position.x;
     let ny = obj.position.y;
@@ -62,29 +36,74 @@ class NodeModel {
 
     for (let i = 0; i < length; i++) {
 
-      let repoId = repos[i];
 
-      let x = (Math.random() * 2);
-      let y = (Math.random() * 2);
-      let z = (Math.random() * 2);
+      let objId = connectedTo[i];
 
-      if (Math.round(Math.random()) === 1) { x = -x; }
-      if (Math.round(Math.random()) === 1) { y = -y; }
-      if (Math.round(Math.random()) === 1) { z = -z; }
+      if (this.connections.hasOwnProperty(objId)) { continue; }
 
-      let newNode = Nodes.createNode([nx + x, ny + y, nz + z], 
-        exampleRepoData[repoId], 0x22FF22);
+      let x = -1 + Math.random() * 2;
+      let y = -1 + Math.random() * 2;
+      let z = -1 + Math.random() * 2;
+      let d = 1 / Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2) + Math.pow(z, 2));
+      x *= d;
+      y *= d;
+      z *= d;
 
-      if (Math.round(Math.random() * 2) === 1) {
-        let randomIndex = Math.round(Math.random() * (Nodes.collection.length - 1));
-        let connect = Nodes.collection[randomIndex];
+      // let x = (Math.random() * 2) + 1;
+      // let y = (Math.random() * 2) + 1;
+      // let z = (Math.random() * 2) + 1;
 
-        if (connect !== newNode) {
-          Nodes.connectTwoNodes(connect, newNode);
-        }
+      // let R = 3;
+
+      // let latitude = i / R;
+      // let longitude = (2 * Math.atan(Math.exp(i / R))) - (Math.PI / 2);
+
+      // let x = R * Math.cos(latitude) * Math.cos(longitude);
+      // let y = R * Math.cos(latitude) * Math.sin(longitude);
+      // let z = R * Math.sin(latitude);
+
+      // if (Math.round(Math.random()) === 1) { x = -x; }
+      // if (Math.round(Math.random()) === 1) { y = -y; }
+      // if (Math.round(Math.random()) === 1) { z = -z; }
+
+
+      let data, color, collection, node;
+
+      if (this.data.type === 'user') {
+        data = exampleRepoData[objId];
+        collection = App.Repos;
+      } else if (this.data.type === 'repo') {
+        data = exampleUserData[objId];
+        collection = App.Users;
       }
 
-      Nodes.connectTwoNodes(newNode, node);
+      if (collection.has(objId)) {
+        node = collection.get(objId);
+      } else {
+        node = new NodeView({
+          object: {
+            position: [(nx + x) * 1.5, (ny + y) * 1.5, (nz + z) * 1.5]
+          },
+
+          texture: {
+            sprite: 'node2.png'
+          },
+
+          data: data
+        }, 
+          collection);
+      }
+
+      this.collection.connectNodes(node, this.object);
     }
+  }
+
+  onMouseOver () {
+    let obj = this.object;
+
+    App.selectedNode[0] = obj;
+    App.selectedNode[1] = obj.material.color.getHex();
+
+    obj.material.color.setRGB(1, 0, 0);
   }
 }
