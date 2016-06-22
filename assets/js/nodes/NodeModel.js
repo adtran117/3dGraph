@@ -30,9 +30,9 @@ class NodeModel {
       let y = (Math.random()) + 0.5;
       let z = (Math.random()) + 0.5;
 
-      x = Math.random() === 1 ? -x : x;
-      y = Math.random() === 1 ? -y : y;
-      z = Math.random() === 1 ? -z : z;
+      x = Math.round(Math.random()) === 1 ? -x : x;
+      y = Math.round(Math.random()) === 1 ? -y : y;
+      z = Math.round(Math.random()) === 1 ? -z : z;
 
       let data, color, collection, node;
 
