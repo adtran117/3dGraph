@@ -5,7 +5,8 @@ const Controls = {
 Controls.init = () => {
   Controls.targetObj;
   Controls.destination = App.controls.target;
-  // Controls.minDistance = App.controls.minDistance;
+
+  Controls.zoomDistance = 2.4;
   Controls.maxDistance = App.controls.maxDistance;
 };
 
@@ -27,8 +28,10 @@ Controls.update = () => {
   let dest = Controls.destination;
   let pos = App.controls.target;
 
-  if (dest.x !== pos.x || dest.y !== pos.y || dest.z !== pos.z) {
 
+  // This awful unDRY if statement is so App.controls.maxDistance can be reset back to normal
+  if (dest.x !== pos.x || dest.y !== pos.y || dest.z !== pos.z) {
+    
     // Get difference between distance and camera's focus point
     let diffx = dest.x - pos.x;
     let diffy = dest.y - pos.y;
@@ -36,18 +39,24 @@ Controls.update = () => {
 
     let mulx, muly, mulz;
 
-    if (Math.abs(diffx) > 2) { mulx = Math.abs(diffx); }
-      else { mulx = Math.abs(Math.sin(diffx)); }
+    const mul = 0.075;
+    const min = 0.0001;
 
-    if (Math.abs(diffy) > 2) { muly = Math.abs(diffy); }
-      else { muly = Math.abs(Math.sin(diffy)); }
+    if (dest.x !== pos.x) {
+      if (Math.abs(diffx) > 2) { mulx = Math.abs(diffx); }
+        else { mulx = Math.abs(Math.sin(diffx)); }
+    }
 
-    if (Math.abs(diffz) > 2) { mulz = Math.abs(diffz); }
-      else { mulz = Math.abs(Math.sin(diffz)); }
+    if (dest.y !== pos.y) {
+      if (Math.abs(diffy) > 2) { muly = Math.abs(diffy); }
+        else { muly = Math.abs(Math.sin(diffy)); }
+    }
 
-
-    let mul = 0.075;
-    let min = 0.0001;
+    if (dest.z !== pos.z) {
+      if (Math.abs(diffz) > 2) { mulz = Math.abs(diffz); }
+        else { mulz = Math.abs(Math.sin(diffz)); }
+    }
+    
 
     if (Math.abs(diffx) >= min && mulx >= min) {
       App.controls.target.x += (Math.sign(diffx) * mulx * mul);
@@ -68,7 +77,6 @@ Controls.update = () => {
       App.controls.target.z = dest.z;
     }
   } else {
-    // App.controls.minDistance = Controls.minDistance;
     App.controls.maxDistance = Controls.maxDistance;
   }
 };
