@@ -15,7 +15,7 @@ class NodeView {
 
     if (!data.material.hasOwnProperty('color')) {
       if (data.data.type === 'user') {
-        data.material.color = 0xD7F6FC;
+        data.material.color = 0xC6E5FC;
       } else {
         data.material.color = 0xDDFDDB;
       }
