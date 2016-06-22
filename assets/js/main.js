@@ -23,13 +23,11 @@ App.init = () => {
   App.renderer.setSize(window.innerWidth, window.innerHeight);
 
   App.controls = new THREE.TrackballControls(App.camera);
-
   App.controls.minDistance = 0.4;
-  App.controls.maxDistance = 4.4;
+  App.controls.maxDistance = 10;
 
   Controls.init();
 
-  document.body.appendChild(App.renderer.domElement);
 
   App.selectedNode = []; 
 
@@ -53,6 +51,7 @@ App.init = () => {
 
   Controls.targetObj = user;
 
+  document.body.appendChild(App.renderer.domElement);
   App.render();
 };
 
