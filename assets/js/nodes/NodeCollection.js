@@ -64,8 +64,8 @@ class NodeCollection {
     }
 
     let material = new THREE.LineBasicMaterial({ 
-      color: 0xDAFAEC,
-      linewidth: 4,
+      color: 0xC9EBDB,
+      linewidth: 2,
       fog: true
     });
 
