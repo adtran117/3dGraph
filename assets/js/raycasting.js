@@ -24,8 +24,9 @@ Ray.handleMouseOver = () => {
     label.style.top = Controls.mouse.y + 'px';
 
     label.innerHTML = 
-      '<small>(' + selectedNode[0].model.data.type + ')</small><br />' +
-      selectedNode[0].model.data.name;
+      '<small>(' + selectedNode[0].model.data.type + ')</small><br /> id: ' +
+      selectedNode[0].model.data.id + 
+      '<br /> name: ' + selectedNode[0].model.data.name;
     label.style.visibility = 'visible';
   } else {
     label.innerHTML = '';
@@ -66,12 +67,15 @@ Ray.handleMouseDown = (event) => {
 
   let dist = new THREE.Vector3(x, y, z).length();
 
-  // App.controls.minDistance = dist;
   App.controls.maxDistance = dist;
+
+  let type = node.model.data.type;
+  let other = (type === 'User' ? 'Repos' : 'Users');
 
   $.ajax(
     {
-      url: 'http://localhost:3000/api/v1/users/' + node.model.data.name + '?getRepos=true',
+      url: 'http://localhost:3000/api/v1/' + type.toLowerCase() + 's/' 
+        + node.model.data.name + '?get' + other + '=true',
       method: 'GET',
       success: (data) => { 
         console.log('Success!', JSON.parse(data)); 

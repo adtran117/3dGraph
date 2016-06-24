@@ -25,7 +25,9 @@ class NodeModel {
 
     for (let i = 0; i < length; i++) {
       let datum = data[i]._fields[0];
-      let objId = datum.identity['low'];
+      let props = datum.properties;
+      let objId = props.id['low'];
+      let type = datum.labels[0];
 
       if (this.connections.hasOwnProperty(objId)) { continue; }
 
@@ -38,8 +40,6 @@ class NodeModel {
       z = Math.round(Math.random()) === 1 ? -z : z;
 
       let color, collection, node;
-      let props = datum.properties;
-      let type = datum.labels[0];
 
       if (type === 'User') {
         collection = App.Users;
