@@ -43,34 +43,66 @@ App.init = () => {
     success: (data) => { 
       data = JSON.parse(data);
       let props = data[0]._fields[0].properties;
+
       console.log(props);
 
-      user = new NodeView({
-        object: {
-          position: [0, 0, 0],
-          isNode: true
-        },
+      user = App.createNodeFromData({
+        id: props.id['low'],
+        name: props.login,
+        type: 'User',
+        collection: App.Users,
+        position: [0, 0, 0],
+        props: props
+      });
 
-        texture: {
-          sprite: 'node2.png'
-        },
+      Controls.targetObj = user;
 
-        data: {
-          id: props.id['low'],
-          name: props.login,
-          type: 'User',
-          info: props
-        }
-      }, 
-        App.Users);
+      document.body.appendChild(App.renderer.domElement);
+      App.render();
+    },
+
+    error: (err) => {
+      document.body.innerHTML = 'AJAX request error: ' + err.toString();
     }
   });
 
+};
 
-  Controls.targetObj = user;
+/*
+  ********** App.createNodeFromData ***********
 
-  document.body.appendChild(App.renderer.domElement);
-  App.render();
+  data = {
+    (int) id: GitHub id
+    (str) name: User's `login` or Repo's `name`
+    (str) type: 'User' or 'Repo'
+    (obj) collection: The NodeCollection we'll be putting this node in
+    (arr) position: A three-item array containing x, y, and z coordinates
+    (obj) props: Object containing properties obtained from AJAX request
+  };
+*/
+
+App.createNodeFromData = (data) => {
+  let props = data.props;
+  let type = data.type;
+  let id = data.id;
+
+  return new NodeView({
+    object: {
+      position: data.position
+    },
+
+    texture: {
+      sprite: (type === 'User' ? props.avatar_url : 'node2.png')
+    },
+
+    data: {
+      id: data.id,
+      name: (type === 'User' ? props.login : props.name),
+      type: type,
+      info: props
+    }
+  }, 
+    data.collection);
 };
 
 App.render = () => {
