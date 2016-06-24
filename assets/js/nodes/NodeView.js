@@ -21,15 +21,18 @@ class NodeView {
       }
     }
 
-    if (!data.texture.hasOwnProperty('sprite')) {
-      data.texture.sprite = 'node2.png';
+    if (!data.texture.hasOwnProperty('sprite') || data.texture.sprite === 'node2.png') {
+      data.texture.sprite = 'assets/img/node2.png';
     }
 
     this.model = new NodeModel(data, collection);
 
     let model = this.model;
+    let loader = new THREE.TextureLoader();
 
-    model.texture = new THREE.TextureLoader().load('assets/img/' + data.texture.sprite);
+    loader.crossOrigin = 'anonymous';
+
+    model.texture = loader.load(data.texture.sprite);
     model.material = new THREE.SpriteMaterial({ 
       map: model.texture, 
       color: data.material.color,
