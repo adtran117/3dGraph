@@ -9,11 +9,13 @@ class NodeModel {
     this.collection = collection;
   }
 
-  onClick() {
+  onClick (data) {
     Controls.destination = this.object.position;
 
-    let connectedTo = this.data.connectedTo;
-    let length = connectedTo.length;
+    // let connectedTo = data.connectedTo;
+    // let length = connectedTo.length;
+
+    let length = data.length;
 
     let obj = this.object;
 
@@ -22,7 +24,8 @@ class NodeModel {
     let nz = obj.position.z;
 
     for (let i = 0; i < length; i++) {
-      let objId = connectedTo[i];
+      let datum = data[i]._fields[0];
+      let objId = datum.identity['low'];
 
       if (this.connections.hasOwnProperty(objId)) { continue; }
 
@@ -34,14 +37,14 @@ class NodeModel {
       y = Math.round(Math.random()) === 1 ? -y : y;
       z = Math.round(Math.random()) === 1 ? -z : z;
 
-      let data, color, collection, node;
+      let color, collection, node;
+      let props = datum.properties;
+      let type = datum.labels[0];
 
-      if (this.data.type === 'user') {
-        data = exampleRepoData[objId];
-        collection = App.Repos;
-      } else if (this.data.type === 'repo') {
-        data = exampleUserData[objId];
+      if (type === 'User') {
         collection = App.Users;
+      } else if (type === 'Repo') {
+        collection = App.Repos;
       }
 
       if (collection.has(objId)) {
@@ -56,7 +59,12 @@ class NodeModel {
             sprite: 'node2.png'
           },
 
-          data: data
+          data: {
+            id: objId,
+            name: (type === 'User' ? props.login : props.name),
+            type: type,
+            info: props
+          }
         }, 
           collection);
       }

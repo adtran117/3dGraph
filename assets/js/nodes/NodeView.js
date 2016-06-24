@@ -14,7 +14,7 @@ class NodeView {
     if (!data.hasOwnProperty('object')) { data.object = {}; }
 
     if (!data.material.hasOwnProperty('color')) {
-      if (data.data.type === 'user') {
+      if (data.data.type === 'User') {
         data.material.color = 0xC6E5FC;
       } else {
         data.material.color = 0xDDFDDB;
@@ -58,11 +58,11 @@ class NodeView {
     App.scene.add(model.object);
   }
 
-  onClick () {
-    this.model.onClick();
+  onClick (data) {
+    this.model.onClick(data);
   }
 
-  onMouseOver() {
+  onMouseOver () {
     this.model.onMouseOver();
   }
 }

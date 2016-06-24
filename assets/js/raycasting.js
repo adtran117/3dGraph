@@ -69,5 +69,18 @@ Ray.handleMouseDown = (event) => {
   // App.controls.minDistance = dist;
   App.controls.maxDistance = dist;
 
-  node.view.onClick();
+  $.ajax(
+    {
+      url: 'http://localhost:3000/api/v1/users/' + node.model.data.name + '?getRepos=true',
+      method: 'GET',
+      success: (data) => { 
+        console.log('Success!', JSON.parse(data)); 
+
+        data = JSON.parse(data);
+
+        node.view.onClick(data);
+      },
+      error: (err) => { console.log('Error:', err); }
+    }
+  );
 }; 

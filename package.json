@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "jquery": "^3.0.0",
     "react": "^15.1.0",
     "react-dom": "^15.1.0",
     "react-three": "^0.9.3",

@@ -34,19 +34,37 @@ App.init = () => {
   App.Users = new NodeCollection();
   App.Repos = new NodeCollection();
 
-  let user = new NodeView({
-    object: {
-      position: [0, 0, 0],
-      isNode: true
-    },
+  let user;
 
-    texture: {
-      sprite: 'node2.png'
-    },
+  $.ajax({
+    url: 'http://localhost:3000/api/v1/users/certik',
+    method: 'GET',
 
-    data: exampleUserData[4]
-  }, 
-    App.Users);
+    success: (data) => { 
+      data = JSON.parse(data);
+      let props = data[0]._fields[0].properties;
+      console.log(props);
+
+      user = new NodeView({
+        object: {
+          position: [0, 0, 0],
+          isNode: true
+        },
+
+        texture: {
+          sprite: 'node2.png'
+        },
+
+        data: {
+          id: props.id['low'],
+          name: props.login,
+          type: 'User',
+          info: props
+        }
+      }, 
+        App.Users);
+    }
+  });
 
 
   Controls.targetObj = user;
