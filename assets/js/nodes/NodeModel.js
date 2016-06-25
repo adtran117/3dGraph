@@ -1,3 +1,18 @@
+/*
+
+  This is the NodeModel.
+  Any data that needs to be stored gets stored in here.
+
+  You don't want to directly interact with the NodeModel from ThreeJS
+  Use get, getData, set, and setData on the NodeView.
+
+    *******************************************************
+    **   DO NOT CREATE A NodeModel instance ON ITS OWN   **
+    **        CREATE A NodeView INSTANCE INSTEAD         **
+    *******************************************************
+
+*/
+
 class NodeModel {
   constructor (data, collection) {
     if (arguments.length < 2) {
@@ -9,11 +24,25 @@ class NodeModel {
     this.collection = collection;
   }
 
-  onClick (data) {
-    Controls.destination = this.object.position;
+  get (key) {
+    return this[key];
+  }
 
-    // let connectedTo = data.connectedTo;
-    // let length = connectedTo.length;
+  getData (key) {
+    return this.data[key];
+  }
+
+  set (key, value) {
+    this[key] = value;
+  }
+
+  setData (key, value) {
+    this.data[key] = value;
+  }
+
+  onClick (data) {
+    // Update the destination location
+    Controls.destination = this.object.position;
 
     let length = data.length;
 
@@ -35,38 +64,32 @@ class NodeModel {
       let y = (Math.random()) + 0.5;
       let z = (Math.random()) + 0.5;
 
+      // Random chance to make it negative
       x = Math.round(Math.random()) === 1 ? -x : x;
       y = Math.round(Math.random()) === 1 ? -y : y;
       z = Math.round(Math.random()) === 1 ? -z : z;
 
       let color, collection, node;
 
+      // Put the node in the right collection
       if (type === 'User') {
         collection = App.Users;
       } else if (type === 'Repo') {
         collection = App.Repos;
       }
 
+      // If the collection already has the node, just select that
       if (collection.has(objId)) {
         node = collection.get(objId);
       } else {
-        node = new NodeView({
-          object: {
-            position: [(nx + x), (ny + y), (nz + z)]
-          },
-
-          texture: {
-            sprite: 'node2.png'
-          },
-
-          data: {
-            id: objId,
-            name: (type === 'User' ? props.login : props.name),
-            type: type,
-            info: props
-          }
-        }, 
-          collection);
+        // Otherwise make a new one
+        node = App.createNodeFromData({
+          position: [(nx + x), (ny + y), (nz + z)],
+          id: objId,
+          type: type,
+          collection,
+          props: props
+        });
       }
 
       this.collection.connectNodes(node, this.object);
@@ -76,8 +99,7 @@ class NodeModel {
   onMouseOver () {
     let obj = this.object;
 
-    App.selectedNode[0] = obj;
-    App.selectedNode[1] = obj.material.color.getHex();
+    App.selectedNode = obj;
 
     obj.material.color.setRGB(1, 0, 0);
   }

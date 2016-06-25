@@ -1,3 +1,10 @@
+/*
+
+  This is the NodeCollection
+  Anything that has to do with more than one node goes here
+
+*/
+
 class NodeCollection {
   constructor () {
     this._storage = {};
@@ -51,6 +58,8 @@ class NodeCollection {
   }
 
   _connectTwoNodes (node1, node2) {
+    // This allows for lazy inputs - you can put in a NodeView or a sprite and
+    // it'll still work
     if (node1 instanceof NodeView || node1 instanceof THREE.Sprite) {
       node1 = node1.model;
     }
@@ -59,15 +68,16 @@ class NodeCollection {
       node2 = node2.model;
     }
 
-    if (node1.connections.hasOwnProperty(node2.data.id)) {
-      return;
-    }
+    if (node1.connections.hasOwnProperty(node2.data.id)) { return; }
 
     let material = new THREE.LineBasicMaterial({ 
       color: 0xC9EBDB,
       linewidth: 2,
       fog: true
     });
+
+
+    // Making the line that connects the two nodes
 
     let geometry = new THREE.Geometry();
 
@@ -78,6 +88,7 @@ class NodeCollection {
       new THREE.Vector3(pos1.x, pos1.y, pos1.z),
       new THREE.Vector3(pos2.x, pos2.y, pos2.z)
     );
+
     let line = new THREE.Line(geometry, material);
 
     line.object = {
@@ -86,9 +97,11 @@ class NodeCollection {
 
     line.nodes = [node1, node2];
 
+    // edges contains all the lines that connect nodes together
     node1.edges.push(line);
     node2.edges.push(line);
 
+    // connections contains all the nodes a node is connected to
     node1.connections[node2.data.id] = node2;
     node2.connections[node1.data.id] = node1;
 
