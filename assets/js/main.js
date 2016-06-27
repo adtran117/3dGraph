@@ -44,15 +44,8 @@ App.init = () => {
       // Parsing the results to get the information we want
       let props = data[0]._fields[0].properties;
 
-      // Starting user
-      let user = App.createNodeFromData({
-        id: props.id['low'],
-        name: props.login,
-        type: 'User',
-        collection: App.Users,
-        position: [0, 0, 0],
-        props: props
-      });
+      // The starting user
+      App.createNodeFromData({ position: [0, 0, 0], data: data[0] });
 
       // Add canvas to our page
       document.body.appendChild(App.renderer.domElement);
@@ -62,7 +55,9 @@ App.init = () => {
     },
 
     error: (err) => {
-      document.body.innerHTML = 'AJAX request error: ' + err.toString();
+      $('#error').text('AJAX request error: ' + 
+        JSON.stringify(err.status) + ' ' + JSON.stringify(err.statusText));
+      console.log(err);
     }
   });
 
@@ -73,30 +68,29 @@ App.init = () => {
 
   This is the function you'll want to use when creating a node from an AJAX request.
 
-  The only parameter, data, should look like this:
+  The only parameter, obj, should look like this:
 
-  data = {
-    (int) id: GitHub id
-    (str) name: User's `login` or Repo's `name`
-    (str) type: 'User' or 'Repo'
-    (obj) collection: The NodeCollection we'll be putting this node in
+  obj = {
+    (obj) data: The data object that gets returned
     (arr) position: A three-item array containing x, y, and z coordinates
-
-    (obj) props:
-      Object containing properties obtained from AJAX request.
-      Basically `data[0]._fields[0].properties` from earlier.
   };
   
 */
 
-App.createNodeFromData = (data) => {
-  let props = data.props;
-  let type = data.type;
-  let id = data.id;
+App.createNodeFromData = (obj) => {
+  let data = obj.data;
+  let props = data._fields[0].properties;
+  let id = props.id['low'];
+  let type = data._fields[0].labels[0];
+  let collection = (type === 'User' ? App.Users : App.Repos);
+
+  if (!collection.hasOwnProperty(id)) { return; }
+  let name = (type === 'User' ? props.login : props.name);
+  let position = obj.position;
 
   return new NodeView({
     object: {
-      position: data.position
+      position: position
     },
 
     texture: {
@@ -104,15 +98,16 @@ App.createNodeFromData = (data) => {
     },
 
     data: {
-      id: data.id,
-      name: (type === 'User' ? props.login : props.name),
+      id: id,
+      name: name,
       type: type,
       info: props
     }
   }, 
-    data.collection);
+    collection);
 };
 
+// Render loop
 App.render = () => {
   // This is a canvas thing - not too sure what it does tbh
   requestAnimationFrame(App.render);

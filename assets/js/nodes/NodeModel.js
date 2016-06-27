@@ -54,9 +54,7 @@ class NodeModel {
 
     for (let i = 0; i < length; i++) {
       let datum = data[i]._fields[0];
-      let props = datum.properties;
       let objId = props.id['low'];
-      let type = datum.labels[0];
 
       if (this.connections.hasOwnProperty(objId)) { continue; }
 
@@ -69,14 +67,6 @@ class NodeModel {
       y = Math.round(Math.random()) === 1 ? -y : y;
       z = Math.round(Math.random()) === 1 ? -z : z;
 
-      let color, collection, node;
-
-      // Put the node in the right collection
-      if (type === 'User') {
-        collection = App.Users;
-      } else if (type === 'Repo') {
-        collection = App.Repos;
-      }
 
       // If the collection already has the node, just select that
       if (collection.has(objId)) {
@@ -85,10 +75,7 @@ class NodeModel {
         // Otherwise make a new one
         node = App.createNodeFromData({
           position: [(nx + x), (ny + y), (nz + z)],
-          id: objId,
-          type: type,
-          collection,
-          props: props
+          data: data[i]
         });
       }
 

@@ -46,6 +46,8 @@ Ray.handleMouseOver = () => {
   let intersects = Ray.casters.hover.intersectObjects(App.scene.children);
   let length = intersects.length;
 
+  // The first intersected object may not be a node, so lets loop through until
+  // we find one
   for (let i = 0; i < length; i++) {
     if (intersects.length > 0) {
 
@@ -65,7 +67,7 @@ Ray.handleMouseOver = () => {
 Ray.handleMouseDown = (event) => {
   let node = App.selectedNode;
 
-  if (typeof node === 'undefined') { return; }
+  if (typeof node === 'undefined' || node === null) { return; }
 
   let controls = App.controls;
   let obj = controls.object;
