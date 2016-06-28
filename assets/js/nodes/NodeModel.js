@@ -72,8 +72,7 @@ class NodeModel {
       let model = this;
       let collection;
 
-      if (type === 'User') { collection = App.Users; }
-        else { collection = App.Repos; }
+      if (type === 'User') { collection = App.Users; } else { collection = App.Repos; }
 
       // If the collection already has the node, just select that
       if (collection.has(objId)) {
