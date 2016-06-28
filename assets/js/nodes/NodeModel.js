@@ -54,7 +54,9 @@ class NodeModel {
 
     for (let i = 0; i < length; i++) {
       let datum = data[i]._fields[0];
+      let props = datum.properties;
       let objId = props.id['low'];
+      let type = datum.labels[0];
 
       if (this.connections.hasOwnProperty(objId)) { continue; }
 
@@ -67,19 +69,23 @@ class NodeModel {
       y = Math.round(Math.random()) === 1 ? -y : y;
       z = Math.round(Math.random()) === 1 ? -z : z;
 
+      let model = this;
+      let collection;
+
+      if (type === 'User') { collection = App.Users; }
+        else { collection = App.Repos; }
 
       // If the collection already has the node, just select that
       if (collection.has(objId)) {
-        node = collection.get(objId);
+        this.collection.connectNodes(this, collection.get(objId));
       } else {
         // Otherwise make a new one
-        node = App.createNodeFromData({
+        App.createNodeFromData({
           position: [(nx + x), (ny + y), (nz + z)],
-          data: data[i]
+          data: data[i],
+          connectTo: [model]
         });
       }
-
-      this.collection.connectNodes(node, this.object);
     }
   }
 

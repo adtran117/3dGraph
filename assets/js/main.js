@@ -73,6 +73,7 @@ App.init = () => {
   obj = {
     (obj) data: The data object that gets returned
     (arr) position: A three-item array containing x, y, and z coordinates
+    [OPTIONAL] (NodeModel) connectTo: An array containing NodeModel(s) to connect to
   };
   
 */
@@ -84,12 +85,12 @@ App.createNodeFromData = (obj) => {
   let type = data._fields[0].labels[0];
   let collection = (type === 'User' ? App.Users : App.Repos);
 
-  if (!collection.hasOwnProperty(id)) { return; }
+  if (collection.hasOwnProperty(id)) { return; }
   
   let name = (type === 'User' ? props.login : props.name);
   let position = obj.position;
 
-  return new NodeView({
+  let node = new NodeView({
     object: {
       position: position
     },
@@ -106,6 +107,12 @@ App.createNodeFromData = (obj) => {
     }
   }, 
     collection);
+
+  if (obj.hasOwnProperty('connectTo')) {
+    collection.connectNodes(node, ...obj.connectTo);
+  }
+
+  return node;
 };
 
 // Render loop
