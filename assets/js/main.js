@@ -85,6 +85,7 @@ App.createNodeFromData = (obj) => {
   let collection = (type === 'User' ? App.Users : App.Repos);
 
   if (!collection.hasOwnProperty(id)) { return; }
+  
   let name = (type === 'User' ? props.login : props.name);
   let position = obj.position;
 
